@@ -47,13 +47,9 @@ df = pd.DataFrame({
 }, index=substrate_names, dtype=float)
 
 
-def solve_lp(df, target, error_pct):
-    # ensure error_pct is a float and in the range (0, 1)
-    error_pct = float(error_pct)
-    if not 0 <= error_pct <= 1:
-        raise ValueError("error_pct must be in the range (0, 1)")
-    # ensure target is a positive number
-    if target <= 0:
+def solve_lp(df, total_target, deviation):
+    
+    if total_target <= 0:
         raise ValueError("target must be a positive number")
     
     # Create the linear solver with the GLOP backend.
@@ -73,9 +69,9 @@ def solve_lp(df, target, error_pct):
         objective.SetCoefficient(var, obj_coeff[var_name])
     objective.SetMinimization()
 
-    # Create a linear constraint. Σ((Bi-T-e) * Xi) <= 0
-    deviation = target * error_pct
-    ct1 = solver.Constraint(target - deviation, target + deviation, "ct1")
+    # Create a linear constraint.  n*T(1+e) <= Σ(Bi * Xi) <= n*T(1+e)
+   
+    ct1 = solver.Constraint(total_target - deviation, total_target + deviation, "ct1")
     for var_name, var in x.items():
         # print(df.loc[var_name, 'B'])
         ct1.SetCoefficient(var, df.loc[var_name, 'B'])
