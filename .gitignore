@@ -4,5 +4,7 @@
 # Ignore all files in the .vscode directory
 .vscode/
 
+api/
+
 # Ignore the venv directory
 venv/

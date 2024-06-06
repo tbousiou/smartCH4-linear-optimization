@@ -59,7 +59,8 @@ if st.button('Solve LP'):
     solution = solve_lp(current_df, total_target, deviation)
     if solution:
         st.success('Βρέθηκε βέλτιση λύση:!', icon="✅")
-        st.write(f"Κόστος {solution['objective (cost)']}")
+        st.write(f"Κόστος {solution['objective (cost)']} Ευρώ")
+        st.write('Βέλτιστη σύνθεση μίγματος σε Kg:')
         st.table(solution['solution'])
     else:
         st.error('Δε βρέθηκε βέλτιση λύση! Ελέγξτε τους περιορισμούς.')
