@@ -43,8 +43,10 @@ def solve_lp(df, total_target=1000, deviation=0):
         # print(df.loc[var_name, 'B'])
         ct1.SetCoefficient(var, df.loc[var_name, 'B'])
 
-    # Create a linear constraint. Σ((Bi-T+e) * Xi) >= 0
-    # ct2 = solver.Constraint(target + error_pct, solver.infinity(), "ct2")
+    # Create a linear constraint Σ(xi"(Fi-0.1)) <=0
+    ct2 = solver.Constraint(-solver.infinity(), 0, "ct2")
+    for var_name, var in x.items():
+        ct2.SetCoefficient(var, df.loc[var_name, 'F'] - 0.1)
     # for var_name, var in x.items():
     #     ct2.SetCoefficient(var, df.loc[var_name, 'B'])
 

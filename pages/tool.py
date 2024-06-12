@@ -6,6 +6,7 @@ from solver import solve_lp
 initial_df = pd.DataFrame({
         'B': [10, 10],
         'W': [50, 50],
+        'F': [0.1, 0.15],
         'C': [2, 2],
         'D': [0, 0],
     }, index=['S1', 'S2'], dtype=float)
