@@ -78,19 +78,16 @@ if st.button('Solve LP'):
 
         solution = solve_lp(current_df, test_target, deviation)
         if solution:
-            st.success(f"Βρέθηκε βέλτιση λύση για στόχο {
-                       test_target}", icon="✅")
+            st.success(f"Βρέθηκε βέλτιση λύση για στόχο {test_target}", icon="✅")
             st.write(f"Κόστος {solution['objective (cost)']:.2f} Ευρώ")
 
             total_fat = current_df['Fat'] @ pd.Series(solution['solution'])
             total_fat_percentage = total_fat / current_df['Weight'].sum()
-            st.write(f"Συνολικό ποσοστό λίπους: {
-                     100 * total_fat_percentage:.2f} %")
+            st.write(f"Συνολικό ποσοστό λίπους: {100 * total_fat_percentage:.2f} %")
 
             st.write('Βέλτιστη σύνθεση μίγματος σε Kg:')
             st.table(solution['solution'])
         else:
-            st.error(f"Δε βρέθηκε βέλτιση λύση για στόχο {
-                     test_target}! Ελέγξτε τους περιορισμούς.")
+            st.error(f"Δε βρέθηκε βέλτιση λύση για στόχο {test_target}! Ελέγξτε τους περιορισμούς.")
 
         st.divider()
