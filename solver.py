@@ -6,10 +6,10 @@ from ortools.linear_solver import pywraplp
 substrate_names = ['S1', 'S2']
 
 df = pd.DataFrame({
-    'B': [10, 10],
-    'W': [40, 20],
-    'C': [3, 2],
-    'D': [0, 0],
+    'Biogas': [10, 10],
+    'Weight': [40, 20],
+    'Cost': [3, 2],
+    'Distance': [0, 0],
 }, index=substrate_names, dtype=float)
 
 # Solver function
@@ -25,10 +25,10 @@ def solve_lp(df, total_target=1000, deviation=0):
     # Create the variables s1, s2, ... sn
     x = {}
     for index, row in df.iterrows():
-        x[index] = solver.NumVar(0, row['W'], index)
+        x[index] = solver.NumVar(0, row['Weight'], index)
 
     # Objective function coefficients
-    obj_coeff = df['C'] + df['D']
+    obj_coeff = df['Cost'] + df['Distance']
 
     # Create the objective function.
     objective = solver.Objective()
@@ -41,12 +41,12 @@ def solve_lp(df, total_target=1000, deviation=0):
     ct1 = solver.Constraint(total_target - deviation, total_target + deviation, "ct1")
     for var_name, var in x.items():
         # print(df.loc[var_name, 'B'])
-        ct1.SetCoefficient(var, df.loc[var_name, 'B'])
+        ct1.SetCoefficient(var, df.loc[var_name, 'Biogas'])
 
-    # Create a linear constraint Σ(xi"(Fi-0.1)) <=0
+    # Create a linear constraint Σ(xi(Fi-0.1)) <=0
     ct2 = solver.Constraint(-solver.infinity(), 0, "ct2")
     for var_name, var in x.items():
-        ct2.SetCoefficient(var, df.loc[var_name, 'F'] - 0.1)
+        ct2.SetCoefficient(var, df.loc[var_name, 'Fat'] - 0.1)
     # for var_name, var in x.items():
     #     ct2.SetCoefficient(var, df.loc[var_name, 'B'])
 
@@ -55,7 +55,7 @@ def solve_lp(df, total_target=1000, deviation=0):
     # print(solver.variables())
 
     status = solver.Solve()
-    print(status)
+    # print(status)
     if status == pywraplp.Solver.OPTIMAL:
         return {
             'objective (cost)': objective.Value(),

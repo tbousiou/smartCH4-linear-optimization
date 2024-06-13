@@ -4,11 +4,11 @@ from solver import solve_lp
 
 
 initial_df = pd.DataFrame({
-        'B': [10, 10],
-        'W': [50, 50],
-        'F': [0.1, 0.15],
-        'C': [2, 2],
-        'D': [0, 0],
+        'Biogas': [9, 10],
+        'Weight': [60, 50],
+        'Fat': [0.11, 0.08],
+        'Cost': [2, 2],
+        'Distance': [0, 0],
     }, index=['S1', 'S2'], dtype=float)
 
 
@@ -42,26 +42,40 @@ with col1:
                 value=100, min_value=10, max_value=1000)
 with col2:
     error_pct =  st.number_input('Απόκλιση στόχου (%)', value=0,
-                min_value=0, max_value=30)
+                min_value=0, max_value=30, help='Do not use!')
 with col3:
     n = st.number_input('Ημέρες παραγωγής', value=10, min_value=1, max_value=30)
 
 total_target = target*n
 deviation = (total_target*error_pct) / 100
-st.write(f'Στόχος παραγωγής για {n} ημέρες: {total_target} ± {deviation:.2f}')
+st.write(f'Βασικός στόχος παραγωγής για {n} ημέρες: {total_target} ± {deviation:.2f}')
 
 """
-Κάντε κλικ στο κουμπί **SOLVE** για να υπολογιστεί η λύση. Αν δε βρεθεί λύση σημαίνει ότι οι περιορισμοί δεν είναι εφικτοί.
-Προσέξτε ότι όταν υπάρχουν πολλές λύσεις ο αλγόριμθμος επιλέγει την πρώτη που βρίσκει. Αυτό μπορεί να συμβει π.χ. αν τα υποστρώματα έχουν τα ίδια χαρακτηριστικά.
+Κάντε κλικ στο κουμπί **SOLVE** για να υπολογιστούν οι λύσεις.
+Η εφαρμογή θα διερευνήσει λύσεις για διάφορες τιμές γύρω από τον στόχο παραγωγής μεθανίου.
+Αν δε βρεθεί μια λύση σημαίνει ότι οι περιορισμοί δεν είναι εφικτοί.
+Προσέξτε ότι όταν υπάρχουν πολλές πιθανές λύσεις ο αλγόριμθμος επιλέγει την πρώτη που βρίσκει. Αυτό μπορεί να συμβει π.χ. αν τα υποστρώματα έχουν τα ίδια χαρακτηριστικά.
 """
 
 # Add a button to solve the linear programming problem
 if st.button('Solve LP'):
-    solution = solve_lp(current_df, total_target, deviation)
-    if solution:
-        st.success('Βρέθηκε βέλτιση λύση:!', icon="✅")
-        st.write(f"Κόστος {solution['objective (cost)']} Ευρώ")
-        st.write('Βέλτιστη σύνθεση μίγματος σε Kg:')
-        st.table(solution['solution'])
-    else:
-        st.error('Δε βρέθηκε βέλτιση λύση! Ελέγξτε τους περιορισμούς.')
+    for i in [-10,-5,-2,0,2,5,10]:
+        
+        test_target = total_target + (i/100)*total_target
+        
+        solution = solve_lp(current_df, test_target, deviation)
+        if solution:
+            st.success(f"Βρέθηκε βέλτιση λύση για στόχο {test_target}", icon="✅")
+            st.write(f"Κόστος {solution['objective (cost)']:.2f} Ευρώ")
+            
+            total_fat = current_df['Fat'] @ pd.Series(solution['solution'])
+            total_fat_percentage = total_fat / current_df['Weight'].sum()
+            st.write(f"Συνολικό ποσοστό λίπους: {100 * total_fat_percentage:.2f} %")
+            
+            st.write('Βέλτιστη σύνθεση μίγματος σε Kg:')
+            st.table(solution['solution'])
+        else:
+            st.error(f"Δε βρέθηκε βέλτιση λύση για στόχο {test_target}! Ελέγξτε τους περιορισμούς.")
+    
+        st.divider()
+        
