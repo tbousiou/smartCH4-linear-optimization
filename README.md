@@ -5,7 +5,8 @@
 ## Εγκατάσταση
 Δημιουργήστε ένα python virtual environment
 
-`pip install streamlit ortools
-streamlit run home.py`
+`pip install streamlit ortools`
+
+`streamlit run home.py`
 
 Οδηγίες χρήσης εντός της εφαρογής
