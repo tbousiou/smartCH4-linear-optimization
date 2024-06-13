@@ -57,8 +57,8 @@ multiple_targets = st.checkbox(
 
 total_target = target*n
 deviation = (total_target*error_pct) / 100
-st.write(f'Βασικός στόχος παραγωγής για {n} ημέρες: {
-         total_target} ± {deviation:.2f}')
+st.write(f"Βασικός στόχος παραγωγής για {n} ημέρες: {
+         total_target} ± {deviation:.2f}")
 
 """
 Κάντε κλικ στο κουμπί **SOLVE** για να υπολογιστούν οι λύσεις.
