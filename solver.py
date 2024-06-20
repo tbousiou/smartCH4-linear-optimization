@@ -49,13 +49,7 @@ def solve_lp(df, total_target=1000, deviation=0):
     ct2 = solver.Constraint(-solver.infinity(), 0, "ct2")
     for var_name, var in x.items():
         ct2.SetCoefficient(var, df.loc[var_name, 'Fat'] - 0.1)
-    # for var_name, var in x.items():
-    #     ct2.SetCoefficient(var, df.loc[var_name, 'B'])
-
-    
-    # print(solver.constraints())
-    # print(solver.variables())
-
+   
     status = solver.Solve()
     # print(status)
     if status == pywraplp.Solver.OPTIMAL:
