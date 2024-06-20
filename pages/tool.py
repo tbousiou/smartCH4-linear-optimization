@@ -16,14 +16,6 @@ if st.session_state.get('df') is None:
     current_df = initial_df
     st.session_state.df = current_df
 
-# substrate_names = ['S1', 'S2']
-
-# df = pd.DataFrame({
-#     'B': [10, 10],
-#     'W': [40, 20],
-#     'C': [3, 2],
-#     'D': [0, 0],
-# }, index=substrate_names, dtype=float)
 
 st.header('Υπολογισμός βέλτισης λύσης', divider='rainbow')
 """

@@ -1,20 +1,22 @@
 import pandas as pd
 from ortools.linear_solver import pywraplp
 
-# Used for testing
-
-substrate_names = ['S1', 'S2']
-
-df = pd.DataFrame({
-    'Biogas': [10, 10],
-    'Weight': [40, 20],
-    'Cost': [3, 2],
-    'Distance': [0, 0],
-}, index=substrate_names, dtype=float)
-
 # Solver function
 
 def solve_lp(df, total_target=1000, deviation=0):
+    """
+    Solve the linear programming problem with the given data frame and target.
+    
+    Parameters:
+    
+    df: pandas.DataFrame
+    total_target: float
+    deviation: float
+    
+    Returns:
+    
+    dict
+    """
     
     if total_target <= 0:
         raise ValueError("target must be a positive number")
@@ -67,4 +69,4 @@ def solve_lp(df, total_target=1000, deviation=0):
 
 
 
-# print(solve_lp2(df, 500, 10))
+
