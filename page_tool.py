@@ -71,7 +71,7 @@ if st.button('Solve LP'):
         solution = solve_lp(current_df, test_target, deviation)
         if solution:
             st.success(f"Βρέθηκε βέλτιση λύση για στόχο {test_target}", icon="✅")
-            st.write(f"Κόστος {solution['objective (cost)']:.2f} Ευρώ")
+            st.write(f"Κόστος {solution['cost']:.2f} Ευρώ")
 
             total_fat = current_df['Fat'] @ pd.Series(solution['solution'])
             total_fat_percentage = total_fat / current_df['Weight'].sum()

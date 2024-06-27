@@ -15,7 +15,7 @@ def solve_lp(df, total_target=1000, deviation=0):
     
     Returns:
     
-    dict
+    dictionary: {'cost': float, 'solution': dict}
     """
     
     if total_target <= 0:
@@ -54,7 +54,7 @@ def solve_lp(df, total_target=1000, deviation=0):
     # print(status)
     if status == pywraplp.Solver.OPTIMAL:
         return {
-            'objective (cost)': objective.Value(),
+            'cost': objective.Value(),
             'solution': {var_name: var.solution_value() for var_name, var in x.items()},
         }
     else:
