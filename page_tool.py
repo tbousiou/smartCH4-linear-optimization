@@ -1,7 +1,22 @@
 import streamlit as st
 import pandas as pd
 from solver import solve_lp
+import random
 
+
+@st.experimental_fragment
+def get_prediction(key=None):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        get_prediction_btn = st.button("Πρόβλεψη", help="Get the prediction from the model", key=key, type="secondary")
+    with col2:
+        if get_prediction_btn:
+            # st.balloons()
+            prediction = random.randint(8, 18)
+            st.write(f"Prediction: {prediction}")
+    with col3:
+        if get_prediction_btn:
+            st.button("Save", help="Save the prediction to the database", type="primary")
 
 initial_df = pd.DataFrame({
     'Biogas': [9, 10],
@@ -58,7 +73,7 @@ st.write(f"Βασικός στόχος παραγωγής για {n} ημέρε�
 """
 
 # Add a button to solve the linear programming problem
-if st.button('Solve LP'):
+if st.button('Solve LP', type="primary"):
     if multiple_targets:
         test_target_deviations = [-10, -5, -2, 0, 2, 5, 10]
     else:
@@ -79,6 +94,7 @@ if st.button('Solve LP'):
 
             st.write('Βέλτιστη σύνθεση μίγματος σε Kg:')
             st.table(solution['solution'])
+            get_prediction(key=i)
         else:
             st.error(f"Δε βρέθηκε βέλτιση λύση για στόχο {test_target}! Ελέγξτε τους περιορισμούς.")
 
