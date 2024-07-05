@@ -2,7 +2,47 @@ import streamlit as st
 import pandas as pd
 from solver import solve_lp
 import random
+import requests
 
+api_url = "http://egke.agro.auth.gr:8685/predict/"
+post_data = {
+    "future": [
+        10.6,
+        1
+    ],
+    "past": [
+        [
+            8.87,
+            1,
+            6.91
+        ],
+        [
+            11.02,
+            1,
+            10.83
+        ],
+        [
+            9.46,
+            1,
+            10.89
+        ],
+        [
+            11.93,
+            1,
+            10.95
+        ],
+        [
+            10.89,
+            1,
+            10.96
+        ],
+        [
+            11.01,
+            1,
+            10.98
+        ]
+    ]
+}
 
 @st.experimental_fragment
 def get_prediction(key=None):
@@ -12,9 +52,23 @@ def get_prediction(key=None):
     with col2:
         if get_prediction_btn:
             # st.balloons()
-            prediction = random.randint(8, 18)
-            st.write(f"Prediction: {prediction}")
-    with col3:
+            # prediction = random.randint(8, 18)
+            # st.write(f"Prediction: {prediction}")
+            with st.spinner('Wait for it...'):
+                post_data['future'][0] = random.uniform(8, 18)
+                post_data['future'][1] = random.uniform(0.5, 1.5)
+                try:
+                    response = requests.post(
+                        api_url, json=post_data, timeout=10)
+                    response.raise_for_status()
+                    data = response.json()
+                    # print(data)
+                    st.table(data)
+                    st.success('Done!')
+                except requests.exceptions.RequestException as errex:
+                    # st.write(errex)
+                    st.error('Error!')
+    with col3:            
         if get_prediction_btn:
             st.button("Save", help="Save the prediction to the database", type="primary")
 
