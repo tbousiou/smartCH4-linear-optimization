@@ -51,9 +51,6 @@ def get_prediction(key=None):
         get_prediction_btn = st.button("Πρόβλεψη", help="Get the prediction from the model", key=key, type="secondary")
     with col2:
         if get_prediction_btn:
-            # st.balloons()
-            # prediction = random.randint(8, 18)
-            # st.write(f"Prediction: {prediction}")
             with st.spinner('Wait for it...'):
                 post_data['future'][0] = random.uniform(8, 18)
                 post_data['future'][1] = random.uniform(0.5, 1.5)
@@ -62,7 +59,6 @@ def get_prediction(key=None):
                         api_url, json=post_data, timeout=10)
                     response.raise_for_status()
                     data = response.json()
-                    # print(data)
                     st.table(data)
                     st.success('Done!')
                 except requests.exceptions.RequestException as errex:
