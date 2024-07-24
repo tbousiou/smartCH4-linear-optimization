@@ -69,7 +69,7 @@ def get_prediction(key=None):
             st.button("Save", help="Save the prediction to the database", type="primary")
 
 initial_df = pd.DataFrame({
-    'Biogas': [9, 10],
+    'Methane': [9, 10],
     'Weight': [60, 50],
     'Fat': [0.11, 0.08],
     'Cost': [2, 2],
@@ -93,7 +93,7 @@ current_df = st.data_editor(st.session_state.df, num_rows="dynamic")
 Εδώ επιλέξετε τις βασικές παραμέτρους για τον υπολογισμό της βέλτιστης λύσης.
 """
 
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
 with col1:
     target = st.number_input('Ημερήσια παραγωγή μεθανίου (T)',
                              value=100, min_value=10, max_value=1000)
@@ -102,9 +102,7 @@ with col2:
     n = st.number_input('Ημέρες παραγωγής', value=10,
                         min_value=1, max_value=30)
 
-with col3:
-    error_pct = st.number_input('Απόκλιση στόχου (%)', value=0,
-                                min_value=0, max_value=30, help='Do not use!')
+
 
 multiple_targets_help_text = """
 Επιλέγοντας αυτή την επιλογή η εφαρμογή θα διερευνήσει λύσεις για διάφορες τιμές γύρω από τον στόχο παραγωγής μεθανίου.
@@ -113,8 +111,8 @@ multiple_targets = st.checkbox(
     'Διευρεύνση λύσεων κοντά στο στόχο?', key='many_solutions', help=multiple_targets_help_text)
 
 total_target = target*n
-deviation = (total_target*error_pct) / 100
-st.write(f"Βασικός στόχος παραγωγής για {n} ημέρες: {total_target} ± {deviation:.2f}")
+
+st.write(f"Βασικός στόχος παραγωγής CH4 για {n} ημέρες: {total_target} Liters")
 
 """
 Κάντε κλικ στο κουμπί **SOLVE** για να υπολογιστούν οι λύσεις.
@@ -133,7 +131,7 @@ if st.button('Solve LP', type="primary"):
 
         test_target = total_target + (i/100)*total_target
 
-        solution = solve_lp(current_df, test_target, deviation)
+        solution = solve_lp(current_df, test_target, 0)
         if solution:
             st.success(f"Βρέθηκε βέλτιση λύση για στόχο {test_target}", icon="✅")
             st.write(f"Κόστος {solution['cost']:.2f} Ευρώ")

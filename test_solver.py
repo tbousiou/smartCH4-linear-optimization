@@ -4,7 +4,7 @@ from solver import solve_lp
 substrate_names = ['S1', 'S2']
 
 test_df = pd.DataFrame({
-    'Biogas': [9, 10],
+    'Methane': [9, 10],
     'Weight': [60, 50],
     'Fat': [0.11, 0.08],
     'Cost': [2, 2],
