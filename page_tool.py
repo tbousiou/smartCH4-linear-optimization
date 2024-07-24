@@ -70,10 +70,10 @@ def get_prediction(key=None):
 
 initial_df = pd.DataFrame({
     'Methane': [9, 10],
-    'Weight': [60, 50],
+    'Weight': [45, 35],
     'Fat': [0.11, 0.08],
-    'Cost': [2, 2],
-    'Distance': [0, 0],
+    'Cost': [2.5, 2],
+    'Distance': [1, 1],
 }, index=['S1', 'S2'], dtype=float)
 
 
@@ -99,7 +99,7 @@ with col1:
                              value=100, min_value=10, max_value=1000)
 
 with col2:
-    n = st.number_input('Ημέρες παραγωγής', value=10,
+    n = st.number_input('Ημέρες παραγωγής', value=7,
                         min_value=1, max_value=30)
 
 
